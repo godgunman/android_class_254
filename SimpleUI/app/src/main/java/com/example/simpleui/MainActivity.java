@@ -3,6 +3,7 @@ package com.example.simpleui;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,18 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         editText = (EditText) findViewById(R.id.editText);
+        editText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN &&
+                        keyCode == KeyEvent.KEYCODE_ENTER) {
+                    submit(v);
+                }
+
+                return false;
+            }
+        });
+
         hideCheckBox = (CheckBox) findViewById(R.id.checkBox);
     }
 
