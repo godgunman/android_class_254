@@ -2,16 +2,28 @@ package com.example.simpleui;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    private EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        editText = (EditText) findViewById(R.id.editText);
+    }
+
+    public void submit(View view) {
+        String text = editText.getText().toString();
+        Log.d("debug", "edittext: " + text);
     }
 
     @Override
