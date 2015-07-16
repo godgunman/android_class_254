@@ -7,6 +7,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -29,8 +30,8 @@ public class MainActivity extends ActionBarActivity {
                 if (event.getAction() == KeyEvent.ACTION_DOWN &&
                         keyCode == KeyEvent.KEYCODE_ENTER) {
                     submit(v);
+                    return true;
                 }
-
                 return false;
             }
         });
