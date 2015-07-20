@@ -9,10 +9,13 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +24,7 @@ public class MainActivity extends ActionBarActivity {
 
     private EditText editText;
     private CheckBox hideCheckBox;
+    private ListView listView;
 
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
@@ -32,6 +36,8 @@ public class MainActivity extends ActionBarActivity {
 
         sp = getSharedPreferences("settings", Context.MODE_PRIVATE);
         editor = sp.edit();
+
+        listView = (ListView) findViewById(R.id.listView);
 
         editText = (EditText) findViewById(R.id.editText);
         editText.setOnKeyListener(new View.OnKeyListener() {
@@ -64,6 +70,7 @@ public class MainActivity extends ActionBarActivity {
         });
         hideCheckBox.setChecked(sp.getBoolean("checkbox", false));
 
+        loadHistory();
     }
 
     public void submit(View view) {
@@ -75,9 +82,17 @@ public class MainActivity extends ActionBarActivity {
 
         Toast.makeText(this, text, Toast.LENGTH_LONG).show();
         editText.setText("");
+        loadHistory();
+    }
 
-        TextView textView = (TextView) findViewById(R.id.textView);
-        textView.setText(Utils.readFile(this, "history.txt"));
+    private void loadHistory() {
+        String history = Utils.readFile(this, "history.txt");
+        String[] data = history.split("\n");
+
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data);
+
+        listView.setAdapter(adapter);
     }
 
     @Override
