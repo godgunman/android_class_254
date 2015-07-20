@@ -4,6 +4,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 
 public class MenuActivity extends ActionBarActivity {
@@ -12,6 +14,12 @@ public class MenuActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+    }
+
+    public void add1(View view) {
+        Button button = (Button) view;
+        int count = Integer.parseInt(button.getText().toString());
+        button.setText(String.valueOf(count + 1));
     }
 
     @Override
