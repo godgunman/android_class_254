@@ -1,6 +1,7 @@
 package com.example.simpleui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -83,6 +84,12 @@ public class MainActivity extends ActionBarActivity {
         Toast.makeText(this, text, Toast.LENGTH_LONG).show();
         editText.setText("");
         loadHistory();
+    }
+
+    public void goToMenuActivity(View view) {
+        Intent intent = new Intent();
+        intent.setClass(this, MenuActivity.class);
+        startActivity(intent);
     }
 
     private void loadHistory() {
