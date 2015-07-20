@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -53,6 +54,15 @@ public class MainActivity extends ActionBarActivity {
 
 
         hideCheckBox = (CheckBox) findViewById(R.id.checkBox);
+        hideCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                editor.putBoolean("checkbox", isChecked);
+                editor.commit();
+            }
+        });
+        hideCheckBox.setChecked(sp.getBoolean("checkbox", false));
+
     }
 
     public void submit(View view) {
