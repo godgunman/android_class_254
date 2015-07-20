@@ -12,7 +12,7 @@ import java.io.IOException;
  */
 public class Utils {
 
-    public void writeFile(Context context, String text, String fileName) {
+    public static void writeFile(Context context, String text, String fileName) {
         try {
             FileOutputStream fos = context.openFileOutput(
                     fileName, Context.MODE_APPEND);
@@ -26,7 +26,7 @@ public class Utils {
 
     }
 
-    public String readFile(Context context, String fileName) {
+    public static String readFile(Context context, String fileName) {
         try {
             FileInputStream fis = context.openFileInput(fileName);
             byte[] buffer = new byte[1024];

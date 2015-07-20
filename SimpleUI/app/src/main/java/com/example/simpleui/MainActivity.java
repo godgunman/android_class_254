@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -70,8 +71,13 @@ public class MainActivity extends ActionBarActivity {
         if (hideCheckBox.isChecked()) {
             text = "***********";
         }
+        Utils.writeFile(this, text + "\n", "history.txt");
+
         Toast.makeText(this, text, Toast.LENGTH_LONG).show();
         editText.setText("");
+
+        TextView textView = (TextView) findViewById(R.id.textView);
+        textView.setText(Utils.readFile(this, "history.txt"));
     }
 
     @Override
