@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 
+    private static final int REQUEST_CODE_MENU_ACTIVITY = 1;
     private EditText editText;
     private CheckBox hideCheckBox;
     private ListView listView;
@@ -89,7 +90,7 @@ public class MainActivity extends ActionBarActivity {
     public void goToMenuActivity(View view) {
         Intent intent = new Intent();
         intent.setClass(this, MenuActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE_MENU_ACTIVITY);
     }
 
     private void loadHistory() {
@@ -100,6 +101,16 @@ public class MainActivity extends ActionBarActivity {
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data);
 
         listView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_MENU_ACTIVITY) {
+            if (resultCode == RESULT_OK) {
+                String menuResult = data.getStringExtra("result");
+                Toast.makeText(this, menuResult, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
