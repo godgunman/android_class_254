@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 
 public class MenuActivity extends ActionBarActivity {
@@ -24,6 +26,20 @@ public class MenuActivity extends ActionBarActivity {
     }
 
     private String getResult() {
+        LinearLayout root = (LinearLayout) findViewById(R.id.root);
+        int count = root.getChildCount();
+        for (int i = 0; i < count -1 ; i++) {
+            LinearLayout drinkStatus = (LinearLayout) root.getChildAt(i);
+            String drinkName =
+                    ((TextView)drinkStatus.getChildAt(0)).getText().toString();
+            String l =
+                    ((Button)drinkStatus.getChildAt(1)).getText().toString();
+            String m =
+                    ((Button)drinkStatus.getChildAt(2)).getText().toString();
+            String s =
+                    ((Button)drinkStatus.getChildAt(3)).getText().toString();
+        }
+
         return "";
     }
 
