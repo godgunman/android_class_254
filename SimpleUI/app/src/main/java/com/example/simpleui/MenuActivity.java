@@ -1,5 +1,6 @@
 package com.example.simpleui;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,6 +21,17 @@ public class MenuActivity extends ActionBarActivity {
         Button button = (Button) view;
         int count = Integer.parseInt(button.getText().toString());
         button.setText(String.valueOf(count + 1));
+    }
+
+    private String getResult() {
+        return "";
+    }
+
+    public void done(View view) {
+        Intent intent = new Intent();
+        intent.putExtra("result", getResult());
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     @Override
