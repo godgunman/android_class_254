@@ -16,30 +16,34 @@
 
         <TextView
             android:id="@+id/textView2"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="black tea" />
+            android:text="black tea"
+            android:layout_weight="4" />
 
         <Button
             android:id="@+id/button3"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="add1"
-            android:text="0" />
+            android:text="0"
+            android:layout_weight="3" />
 
         <Button
             android:id="@+id/button4"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="add1"
-            android:text="0" />
+            android:text="0"
+            android:layout_weight="3" />
 
         <Button
             android:id="@+id/button5"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="add1"
-            android:text="0" />
+            android:text="0"
+            android:layout_weight="3" />
     </LinearLayout>
 
     <LinearLayout
@@ -49,30 +53,34 @@
 
         <TextView
             android:id="@+id/textView3"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="green tea" />
+            android:text="green tea"
+            android:layout_weight="4" />
 
         <Button
             android:id="@+id/button6"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="add1"
-            android:text="0" />
+            android:text="0"
+            android:layout_weight="3" />
 
         <Button
             android:id="@+id/button7"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="add1"
-            android:text="0" />
+            android:text="0"
+            android:layout_weight="3" />
 
         <Button
             android:id="@+id/button8"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="add1"
-            android:text="0" />
+            android:text="0"
+            android:layout_weight="3" />
     </LinearLayout>
 
 </LinearLayout>
