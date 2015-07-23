@@ -3,12 +3,17 @@ package com.example.simpleui;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class MenuActivity extends ActionBarActivity {
@@ -27,6 +32,7 @@ public class MenuActivity extends ActionBarActivity {
 
     private String getResult() {
         LinearLayout root = (LinearLayout) findViewById(R.id.root);
+        JSONArray jsonArray = new JSONArray();
         int count = root.getChildCount();
         for (int i = 0; i < count -1 ; i++) {
             LinearLayout drinkStatus = (LinearLayout) root.getChildAt(i);
@@ -38,9 +44,19 @@ public class MenuActivity extends ActionBarActivity {
                     ((Button)drinkStatus.getChildAt(2)).getText().toString();
             String s =
                     ((Button)drinkStatus.getChildAt(3)).getText().toString();
+            try {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("name", drinkName);
+                jsonObject.put("l", Integer.valueOf(l));
+                jsonObject.put("m", Integer.valueOf(m));
+                jsonObject.put("s", Integer.valueOf(s));
+                jsonArray.put(jsonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
-
-        return "";
+        Log.d("debug", jsonArray.toString());
+        return jsonArray.toString();
     }
 
     public void done(View view) {
