@@ -53,10 +53,6 @@ public class MainActivity extends ActionBarActivity {
         Parse.initialize(this, "6As46KZTL6DzHlA0YrdQcHxe2Kkb6Z7guxjqH86f",
                 "77G3RUogihUrOHAsIFxOFsd1O98R79mPAxHWsBbo");
 
-        ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("foo", "bar");
-        testObject.saveInBackground();
-
         sp = getSharedPreferences("settings", Context.MODE_PRIVATE);
         editor = sp.edit();
 
@@ -114,6 +110,12 @@ public class MainActivity extends ActionBarActivity {
                 order.put("note", text);
                 order.put("menu", menuResultArray);
                 order.put("address", storeInfo);
+
+                ParseObject orderObject = new ParseObject("Order");
+                orderObject.put("note", text);
+                orderObject.put("menu", menuResultArray);
+                orderObject.put("address", storeInfo);
+                orderObject.saveInBackground();
 
                 Utils.writeFile(this, order.toString() + "\n", "history.txt");
 
