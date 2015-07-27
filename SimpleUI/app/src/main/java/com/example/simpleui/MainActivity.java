@@ -127,7 +127,7 @@ public class MainActivity extends ActionBarActivity {
 
     private void loadStoreInfo() {
 
-        String[] data = new String[]{"台大店", "西門店"};
+        String[] data = getResources().getStringArray(R.array.store_info);
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, data);
 
