@@ -20,6 +20,10 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -30,6 +34,7 @@ public class MainActivity extends ActionBarActivity {
 
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
+    private String menuResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,11 +85,27 @@ public class MainActivity extends ActionBarActivity {
         if (hideCheckBox.isChecked()) {
             text = "***********";
         }
-        Utils.writeFile(this, text + "\n", "history.txt");
 
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
-        editText.setText("");
-        loadHistory();
+        if (menuResult != null) {
+            try {
+                JSONObject order = new JSONObject();
+                JSONArray menuResultArray = new JSONArray(menuResult);
+                order.put("note", text);
+                order.put("menu", menuResultArray);
+
+                Utils.writeFile(this, order.toString() + "\n", "history.txt");
+
+                Toast.makeText(this, order.toString(), Toast.LENGTH_LONG).show();
+                editText.setText("");
+                menuResult = null;
+                loadHistory();
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
     }
 
     public void goToMenuActivity(View view) {
@@ -107,7 +128,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_MENU_ACTIVITY) {
             if (resultCode == RESULT_OK) {
-                String menuResult = data.getStringExtra("result");
+                menuResult = data.getStringExtra("result");
                 Toast.makeText(this, menuResult, Toast.LENGTH_SHORT).show();
             }
         }
