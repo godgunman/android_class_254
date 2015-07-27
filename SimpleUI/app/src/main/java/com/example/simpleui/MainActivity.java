@@ -5,19 +5,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -36,6 +34,7 @@ public class MainActivity extends ActionBarActivity {
     private EditText editText;
     private CheckBox hideCheckBox;
     private ListView listView;
+    private Spinner spinner;
 
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
@@ -50,6 +49,8 @@ public class MainActivity extends ActionBarActivity {
         editor = sp.edit();
 
         listView = (ListView) findViewById(R.id.listView);
+
+        spinner = (Spinner) findViewById(R.id.store_info);
 
         editText = (EditText) findViewById(R.id.editText);
         editText.setOnKeyListener(new View.OnKeyListener() {
@@ -83,6 +84,7 @@ public class MainActivity extends ActionBarActivity {
         hideCheckBox.setChecked(sp.getBoolean("checkbox", false));
 
         loadHistory();
+        loadStoreInfo();
     }
 
     public void submit(View view) {
@@ -121,6 +123,15 @@ public class MainActivity extends ActionBarActivity {
 
     public String getDrinkSum(JSONArray menu) {
         return "41";
+    }
+
+    private void loadStoreInfo() {
+
+        String[] data = new String[]{"台大店", "西門店"};
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, data);
+
+        spinner.setAdapter(adapter);
     }
 
     private void loadHistory() {
