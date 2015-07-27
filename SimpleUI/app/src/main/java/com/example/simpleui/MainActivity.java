@@ -95,10 +95,13 @@ public class MainActivity extends ActionBarActivity {
 
         if (menuResult != null) {
             try {
+                String storeInfo = (String) spinner.getSelectedItem();
+
                 JSONObject order = new JSONObject();
                 JSONArray menuResultArray = new JSONArray(menuResult);
                 order.put("note", text);
                 order.put("menu", menuResultArray);
+                order.put("address", storeInfo);
 
                 Utils.writeFile(this, order.toString() + "\n", "history.txt");
 
@@ -145,7 +148,7 @@ public class MainActivity extends ActionBarActivity {
                 JSONObject object = new JSONObject(d);
                 String note = object.getString("note");
                 String sum = getDrinkSum(object.getJSONArray("menu"));
-                String address = "NTU";
+                String address = object.getString("address");
 
                 Map<String, String> item = new HashMap<>();
                 item.put("note", note);
