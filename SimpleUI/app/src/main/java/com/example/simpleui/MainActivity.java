@@ -24,6 +24,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -114,12 +119,41 @@ public class MainActivity extends ActionBarActivity {
         startActivityForResult(intent, REQUEST_CODE_MENU_ACTIVITY);
     }
 
+    public String getDrinkSum(JSONArray menu) {
+        return "41";
+    }
+
     private void loadHistory() {
         String history = Utils.readFile(this, "history.txt");
-        String[] data = history.split("\n");
+        String[] rawData = history.split("\n");
 
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data);
+        List<Map<String, String>> data = new ArrayList<>();
+
+        for (String d: rawData) {
+            try {
+                JSONObject object = new JSONObject(d);
+                String note = object.getString("note");
+                String sum = getDrinkSum(object.getJSONArray("menu"));
+                String address = "NTU";
+
+                Map<String, String> item = new HashMap<>();
+                item.put("note", note);
+                item.put("sum", sum);
+                item.put("address", address);
+
+                data.add(item);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        String[] from = new String[] {"note", "sum", "address"};
+        int[] to = new int[] {R.id.listview_item_note,
+                R.id.listview_item_sum, R.id.listview_item_address};
+
+        SimpleAdapter adapter = new SimpleAdapter(this, data,
+                R.layout.listview_item, from, to);
 
         listView.setAdapter(adapter);
     }
