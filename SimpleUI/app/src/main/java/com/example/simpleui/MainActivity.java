@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -62,6 +63,12 @@ public class MainActivity extends ActionBarActivity {
         editor = sp.edit();
 
         listView = (ListView) findViewById(R.id.listView);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                goToOrderDetailActivity(view, position);
+            }
+        });
 
         spinner = (Spinner) findViewById(R.id.store_info);
 
@@ -141,6 +148,12 @@ public class MainActivity extends ActionBarActivity {
 
         }
 
+    }
+
+    private void goToOrderDetailActivity(View view, int position) {
+        Intent intent = new Intent();
+        intent.setClass(this, OrderDetailActivity.class);
+        startActivity(intent);
     }
 
     public void goToMenuActivity(View view) {
