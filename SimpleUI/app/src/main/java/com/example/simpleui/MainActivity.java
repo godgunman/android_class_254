@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,8 +19,12 @@ import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -115,7 +120,13 @@ public class MainActivity extends ActionBarActivity {
                 orderObject.put("note", text);
                 orderObject.put("menu", menuResultArray);
                 orderObject.put("address", storeInfo);
-                orderObject.saveInBackground();
+
+
+                orderObject.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                    }
+                });
 
                 Utils.writeFile(this, order.toString() + "\n", "history.txt");
 
@@ -152,30 +163,35 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void loadHistory() {
-        String history = Utils.readFile(this, "history.txt");
-        String[] rawData = history.split("\n");
 
-        List<Map<String, String>> data = new ArrayList<>();
+        final List<Map<String, String>> data = new ArrayList<>();
 
-        for (String d: rawData) {
-            try {
-                JSONObject object = new JSONObject(d);
-                String note = object.getString("note");
-                String sum = getDrinkSum(object.getJSONArray("menu"));
-                String address = object.getString("address");
+        ParseQuery<ParseObject> query = new ParseQuery<>("Order");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                if (e == null) {
 
-                Map<String, String> item = new HashMap<>();
-                item.put("note", note);
-                item.put("sum", sum);
-                item.put("address", address);
+                    for (ParseObject object : list) {
+                        String note = object.getString("note");
+                        String sum = getDrinkSum(object.getJSONArray("menu"));
+                        String address = object.getString("address");
 
-                data.add(item);
+                        Map<String, String> item = new HashMap<>();
+                        item.put("note", note);
+                        item.put("sum", sum);
+                        item.put("address", address);
 
-            } catch (JSONException e) {
-                e.printStackTrace();
+                        data.add(item);
+                    }
+                    setDataToListView(data);
+                }
             }
-        }
+        });
 
+    }
+
+    private void setDataToListView(List<Map<String, String>> data) {
         String[] from = new String[] {"note", "sum", "address"};
         int[] to = new int[] {R.id.listview_item_note,
                 R.id.listview_item_sum, R.id.listview_item_address};
