@@ -155,7 +155,24 @@ public class MainActivity extends ActionBarActivity {
 
     private void loadStoreInfo() {
 
-        String[] data = getResources().getStringArray(R.array.store_info);
+        ParseQuery<ParseObject> query = new ParseQuery<>("StoreInfo");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                if (e == null) {
+                    String[] data = new String[list.size()];
+                    for (int i = 0; i < list.size(); i++) {
+                        String name = list.get(i).getString("name");
+                        String address = list.get(i).getString("address");
+                        data[i] = name + "," + address;
+                    }
+                    setDataToSpinner(data);
+                }
+            }
+        });
+    }
+
+    private void setDataToSpinner(String[] data) {
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, data);
 
@@ -192,8 +209,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void setDataToListView(List<Map<String, String>> data) {
-        String[] from = new String[] {"note", "sum", "address"};
-        int[] to = new int[] {R.id.listview_item_note,
+        String[] from = new String[]{"note", "sum", "address"};
+        int[] to = new int[]{R.id.listview_item_note,
                 R.id.listview_item_sum, R.id.listview_item_address};
 
         SimpleAdapter adapter = new SimpleAdapter(this, data,
