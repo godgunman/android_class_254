@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -153,6 +154,19 @@ public class MainActivity extends ActionBarActivity {
     private void goToOrderDetailActivity(View view, int position) {
         Intent intent = new Intent();
         intent.setClass(this, OrderDetailActivity.class);
+
+        TextView note = (TextView) view.findViewById(R.id.listview_item_note);
+        TextView address = (TextView) view.findViewById(R.id.listview_item_address);
+        TextView sum = (TextView) view.findViewById(R.id.listview_item_sum);
+
+        String noteStr = note.getText().toString();
+        String addressStr = address.getText().toString();
+        String sumStr = sum.getText().toString();
+
+        intent.putExtra("note", noteStr);
+        intent.putExtra("address", addressStr);
+        intent.putExtra("sum", sumStr);
+
         startActivity(intent);
     }
 

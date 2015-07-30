@@ -1,9 +1,11 @@
 package com.example.simpleui;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 public class OrderDetailActivity extends ActionBarActivity {
@@ -12,6 +14,14 @@ public class OrderDetailActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
+
+        Intent intent = getIntent();
+        String note = intent.getStringExtra("note");
+        String address = intent.getStringExtra("address");
+        String sum = intent.getStringExtra("sum");
+
+        Toast.makeText(this, note + "," + address +","+ sum,
+                Toast.LENGTH_SHORT).show();
     }
 
     @Override
