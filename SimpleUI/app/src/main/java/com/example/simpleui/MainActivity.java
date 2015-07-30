@@ -49,6 +49,7 @@ public class MainActivity extends ActionBarActivity {
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
     private String menuResult;
+    private List<ParseObject> orderQueryResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,13 +175,20 @@ public class MainActivity extends ActionBarActivity {
         intent.putExtra("sum", (String) item.get("sum"));
     }
 
+    private void putDataToIntent(ParseObject object, Intent intent) {
+        intent.putExtra("note", object.getString("note"));
+        intent.putExtra("address", object.getString("address"));
+        intent.putExtra("sum", getDrinkSum(object.getJSONArray("menu")));
+        intent.putExtra("menu", object.getJSONArray("menu").toString());
+    }
+
     private void goToOrderDetailActivity(View view, int position) {
         Intent intent = new Intent();
         intent.setClass(this, OrderDetailActivity.class);
 
 //        putDataToIntent(view, intent);
-        putDataToIntent(position, intent);
-
+//        putDataToIntent(position, intent);
+        putDataToIntent(orderQueryResult.get(position), intent);
 
         startActivity(intent);
     }
@@ -230,7 +238,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
                 if (e == null) {
-
+                    orderQueryResult = list;
                     for (ParseObject object : list) {
                         String note = object.getString("note");
                         String sum = getDrinkSum(object.getJSONArray("menu"));
