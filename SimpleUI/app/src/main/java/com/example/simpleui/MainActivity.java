@@ -148,13 +148,9 @@ public class MainActivity extends ActionBarActivity {
             }
 
         }
-
     }
 
-    private void goToOrderDetailActivity(View view, int position) {
-        Intent intent = new Intent();
-        intent.setClass(this, OrderDetailActivity.class);
-
+    private void putDataToIntent(View view, Intent intent) {
         TextView note = (TextView) view.findViewById(R.id.listview_item_note);
         TextView address = (TextView) view.findViewById(R.id.listview_item_address);
         TextView sum = (TextView) view.findViewById(R.id.listview_item_sum);
@@ -166,6 +162,25 @@ public class MainActivity extends ActionBarActivity {
         intent.putExtra("note", noteStr);
         intent.putExtra("address", addressStr);
         intent.putExtra("sum", sumStr);
+    }
+
+    private void putDataToIntent(int position, Intent intent) {
+        SimpleAdapter adapter = (SimpleAdapter) listView.getAdapter();
+        Map<String, String> item = (Map<String, String>)
+                adapter.getItem(position);
+
+        intent.putExtra("note", (String) item.get("note"));
+        intent.putExtra("address", (String) item.get("address"));
+        intent.putExtra("sum", (String) item.get("sum"));
+    }
+
+    private void goToOrderDetailActivity(View view, int position) {
+        Intent intent = new Intent();
+        intent.setClass(this, OrderDetailActivity.class);
+
+//        putDataToIntent(view, intent);
+        putDataToIntent(position, intent);
+
 
         startActivity(intent);
     }
