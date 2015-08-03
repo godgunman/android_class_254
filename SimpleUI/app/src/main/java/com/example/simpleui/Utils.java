@@ -2,8 +2,11 @@ package com.example.simpleui;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -49,4 +52,15 @@ public class Utils {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         return baos.toByteArray();
     }
+
+    public static Uri getOutputUri() {
+        File dir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        if (dir.exists() == false) {
+            dir.mkdirs();
+        }
+        File file = new File(dir, "photo.png");
+        return Uri.fromFile(file);
+    }
+
 }
