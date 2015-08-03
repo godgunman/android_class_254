@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
@@ -55,6 +56,7 @@ public class MainActivity extends ActionBarActivity {
     private SharedPreferences.Editor editor;
     private String menuResult;
     private List<ParseObject> orderQueryResult;
+    private Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,14 +137,17 @@ public class MainActivity extends ActionBarActivity {
                 orderObject.put("menu", menuResultArray);
                 orderObject.put("address", storeInfo);
 
+                if (bitmap != null) {
+                    ParseFile file =
+                            new ParseFile("photo.png",Utils.bitmapToBytes(bitmap));
+                    orderObject.put("photo", file);
+                }
 
                 orderObject.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
                     }
                 });
-
-                Utils.writeFile(this, order.toString() + "\n", "history.txt");
 
                 Toast.makeText(this, order.toString(), Toast.LENGTH_LONG).show();
                 editText.setText("");
@@ -289,7 +294,7 @@ public class MainActivity extends ActionBarActivity {
             }
         } else if (requestCode == REQUEST_CODE_CAMERA) {
             if (resultCode == RESULT_OK) {
-                Bitmap bitmap = data.getParcelableExtra("data");
+                bitmap = data.getParcelableExtra("data");
                 ImageView imageView = (ImageView) findViewById(R.id.imageView);
                 imageView.setImageBitmap(bitmap);
             }

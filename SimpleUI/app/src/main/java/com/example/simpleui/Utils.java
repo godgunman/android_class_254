@@ -1,7 +1,9 @@
 package com.example.simpleui;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -40,5 +42,11 @@ public class Utils {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public static byte[] bitmapToBytes(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        return baos.toByteArray();
     }
 }
