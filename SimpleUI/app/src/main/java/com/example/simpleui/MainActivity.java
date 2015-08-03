@@ -3,6 +3,7 @@ package com.example.simpleui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +42,8 @@ import java.util.Map;
 public class MainActivity extends ActionBarActivity {
 
     private static final int REQUEST_CODE_MENU_ACTIVITY = 1;
+    private static final int REQUEST_CODE_CAMERA = 2;
+
     private EditText editText;
     private CheckBox hideCheckBox;
     private ListView listView;
@@ -199,6 +202,12 @@ public class MainActivity extends ActionBarActivity {
         startActivityForResult(intent, REQUEST_CODE_MENU_ACTIVITY);
     }
 
+    private void goToCamera() {
+        Intent intent = new Intent();
+        intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, REQUEST_CODE_CAMERA);
+    }
+
     public String getDrinkSum(JSONArray menu) {
         return "41";
     }
@@ -296,8 +305,11 @@ public class MainActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.action_take_photo) {
+            goToCamera();
         }
 
         return super.onOptionsItemSelected(item);
     }
+
 }
