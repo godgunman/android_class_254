@@ -124,6 +124,12 @@ public class Utils {
 
     public static class NetworkTask extends AsyncTask<String, Void, String> {
 
+        private Callback callback;
+
+        public void setCallback(Callback callback) {
+            this.callback = callback;
+        }
+
         @Override
         protected String doInBackground(String... params) {
 
@@ -137,8 +143,13 @@ public class Utils {
 
         @Override
         protected void onPostExecute(String fetchResult) {
+            callback.done(fetchResult);
+        }
 
+        interface Callback {
+            void done(String fetchResult);
         }
     }
+
 
 }

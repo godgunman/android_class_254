@@ -1,20 +1,26 @@
 package com.example.simpleui;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
 public class OrderDetailActivity extends ActionBarActivity {
 
+    private TextView textView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
+
+        textView = (TextView) findViewById(R.id.textView);
 
         Intent intent = getIntent();
         String note = intent.getStringExtra("note");
@@ -24,6 +30,12 @@ public class OrderDetailActivity extends ActionBarActivity {
         String url = "https://maps.googleapis.com/maps/api/geocode/json?address=taipei101";
 
         Utils.NetworkTask task = new Utils.NetworkTask();
+        task.setCallback(new Utils.NetworkTask.Callback() {
+            @Override
+            public void done(String fetchResult) {
+                textView.setText(fetchResult);
+            }
+        });
         task.execute(url);
     }
 
@@ -48,6 +60,5 @@ public class OrderDetailActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 
 }
