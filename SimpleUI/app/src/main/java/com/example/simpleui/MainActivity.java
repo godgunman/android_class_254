@@ -59,6 +59,8 @@ public class MainActivity extends ActionBarActivity {
     private List<ParseObject> orderQueryResult;
     private Bitmap bitmap;
 
+    private boolean hasPhoto = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,9 +140,10 @@ public class MainActivity extends ActionBarActivity {
                 orderObject.put("menu", menuResultArray);
                 orderObject.put("address", storeInfo);
 
-                if (bitmap != null) {
+                if (hasPhoto) {
+                    Uri uri = Utils.getOutputUri();
                     ParseFile file =
-                            new ParseFile("photo.png",Utils.bitmapToBytes(bitmap));
+                            new ParseFile("photo.png",Utils.uriToBytes(this, uri));
                     orderObject.put("photo", file);
                 }
 
@@ -153,6 +156,7 @@ public class MainActivity extends ActionBarActivity {
                 Toast.makeText(this, order.toString(), Toast.LENGTH_LONG).show();
                 editText.setText("");
                 menuResult = null;
+                hasPhoto = false;
                 loadHistory();
 
             } catch (JSONException e) {
@@ -301,6 +305,8 @@ public class MainActivity extends ActionBarActivity {
                 ImageView imageView = (ImageView) findViewById(R.id.imageView);
 //                imageView.setImageBitmap(bitmap);
                 imageView.setImageURI(uri);
+
+                hasPhoto = true;
             }
         }
     }
