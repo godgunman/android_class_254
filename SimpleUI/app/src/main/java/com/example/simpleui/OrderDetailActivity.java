@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ public class OrderDetailActivity extends ActionBarActivity {
 
     private TextView textView;
     private WebView webView;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,7 @@ public class OrderDetailActivity extends ActionBarActivity {
 
         textView = (TextView) findViewById(R.id.textView);
         webView = (WebView) findViewById(R.id.webView);
+        imageView = (ImageView) findViewById(R.id.imageView);
 
         Intent intent = getIntent();
         String note = intent.getStringExtra("note");

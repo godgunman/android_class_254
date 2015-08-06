@@ -2,6 +2,7 @@ package com.example.simpleui;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -100,6 +101,10 @@ public class Utils {
      */
 
     public static String fetchUrl(String urlStr) {
+        return new String(fetchUrlToByte(urlStr));
+    }
+
+    public static byte[] fetchUrlToByte(String urlStr) {
 
         try {
             URL url = new URL(urlStr);
@@ -115,13 +120,17 @@ public class Utils {
                 baos.write(buffer);
             }
 
-            return new String(baos.toByteArray());
+            return baos.toByteArray();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static Bitmap byteToBitmap(byte[] data) {
+        return BitmapFactory.decodeByteArray(data, 0, data.length);
     }
 
     final static String GEO_URL =
