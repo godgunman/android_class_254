@@ -3,6 +3,7 @@ package com.example.simpleui;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -17,11 +18,13 @@ public class OrderDetailActivity extends ActionBarActivity {
 
         Intent intent = getIntent();
         String note = intent.getStringExtra("note");
-        String address = intent.getStringExtra("address");
+        String address = intent.getStringExtra("address").split(",")[1];
         String sum = intent.getStringExtra("sum");
 
-        Toast.makeText(this, note + "," + address +","+ sum,
-                Toast.LENGTH_SHORT).show();
+        String url = "https://maps.googleapis.com/maps/api/geocode/json?address=taipei101";
+
+        Utils.NetworkTask task = new Utils.NetworkTask();
+        task.execute(url);
     }
 
     @Override
@@ -45,4 +48,6 @@ public class OrderDetailActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }

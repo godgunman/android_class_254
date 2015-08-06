@@ -3,7 +3,9 @@ package com.example.simpleui;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -120,15 +122,23 @@ public class Utils {
         return null;
     }
 
+    public static class NetworkTask extends AsyncTask<String, Void, String> {
 
+        @Override
+        protected String doInBackground(String... params) {
 
+            String url = params[0];
+            String fetchResult = Utils.fetchUrl(url);
 
+            Log.d("debug", fetchResult);
 
+            return fetchResult;
+        }
 
+        @Override
+        protected void onPostExecute(String fetchResult) {
 
-
-
-
-
+        }
+    }
 
 }
