@@ -14,10 +14,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 
 /**
  * Created by ggm on 7/20/15.
@@ -121,6 +123,30 @@ public class Utils {
         }
         return null;
     }
+
+    final static String GEO_URL =
+            "https://maps.googleapis.com/maps/api/geocode/json?address=";
+    public static String getGeoQueryUrl(String address) {
+        try {
+            return GEO_URL + URLEncoder.encode(address, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    final static String STATIC_MAP_URL =
+            "https://maps.googleapis.com/maps/api/staticmap?center=%s&zoom=16&size=300x300&maptype=roadmap";
+    public static String getStaticMapUrl(String center) {
+        try {
+            center = URLEncoder.encode(center, "utf-8");
+            return String.format(STATIC_MAP_URL, center);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     public static class NetworkTask extends AsyncTask<String, Void, String> {
 

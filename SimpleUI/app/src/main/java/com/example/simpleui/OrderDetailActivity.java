@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ import android.widget.Toast;
 public class OrderDetailActivity extends ActionBarActivity {
 
     private TextView textView;
+    private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,19 +23,23 @@ public class OrderDetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_order_detail);
 
         textView = (TextView) findViewById(R.id.textView);
+        webView = (WebView) findViewById(R.id.webView);
 
         Intent intent = getIntent();
         String note = intent.getStringExtra("note");
         String address = intent.getStringExtra("address").split(",")[1];
         String sum = intent.getStringExtra("sum");
 
-        String url = "https://maps.googleapis.com/maps/api/geocode/json?address=taipei101";
+        webView.loadUrl(Utils.getStaticMapUrl(address));
+
+        String url = Utils.getGeoQueryUrl(address);
 
         Utils.NetworkTask task = new Utils.NetworkTask();
+
         task.setCallback(new Utils.NetworkTask.Callback() {
             @Override
             public void done(String fetchResult) {
-                textView.setText(fetchResult);
+//                textView.setText(fetchResult);
             }
         });
         task.execute(url);
