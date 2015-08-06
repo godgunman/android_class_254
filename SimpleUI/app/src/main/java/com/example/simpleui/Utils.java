@@ -12,6 +12,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
 
 /**
  * Created by ggm on 7/20/15.
@@ -84,4 +88,47 @@ public class Utils {
         File file = new File(dir, "photo.png");
         return Uri.fromFile(file);
     }
+
+    /**
+     * https://maps.googleapis.com/maps/api/geocode/json?address=taipei101
+     * @param urlStr
+     * @return
+     */
+
+    public static String fetchUrl(String urlStr) {
+
+        try {
+            URL url = new URL(urlStr);
+            URLConnection urlConnection = url.openConnection();
+            InputStream is = urlConnection.getInputStream();
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            byte[] buffer = new byte[1024];
+            int len = 0;
+
+            while( (len = is.read(buffer)) != -1) {
+                baos.write(buffer);
+            }
+
+            return new String(baos.toByteArray());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 }
