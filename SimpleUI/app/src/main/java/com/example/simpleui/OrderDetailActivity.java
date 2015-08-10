@@ -47,16 +47,21 @@ public class OrderDetailActivity extends ActionBarActivity {
         });
         task.execute(url);
 
-        String staticMapUrl = Utils.getStaticMapUrl(address);
+        final String staticMapUrl = Utils.getStaticMapUrl(address);
         Utils.NetworkTask getStaticMapTask = new Utils.NetworkTask();
         getStaticMapTask.setCallback(new Utils.NetworkTask.Callback() {
             @Override
             public void done(byte[] fetchResult) {
                 Bitmap bm = Utils.byteToBitmap(fetchResult);
+                Log.d("debug", staticMapUrl);
+                Log.d("debug", "len:" + fetchResult.length);
+                Log.d("debug", "len:" + fetchResult.length
+                        + "bm:width" + bm.getWidth()
+                        + "bm:height" + bm.getHeight());
                 imageView.setImageBitmap(bm);
             }
         });
-        getStaticMapTask.execute(staticMapUrl);
+        getStaticMapTask.execute("http://masaliados.cl/wp/wp-content/uploads/2013/10/big-google-logo.png");
     }
 
     @Override
