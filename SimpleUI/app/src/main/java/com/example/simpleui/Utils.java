@@ -8,6 +8,10 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONStringer;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -160,7 +164,6 @@ public class Utils {
     public static class NetworkTask extends AsyncTask<String, Void, byte[]> {
 
         private Callback callback;
-
         public void setCallback(Callback callback) {
             this.callback = callback;
         }
@@ -182,5 +185,20 @@ public class Utils {
         }
     }
 
+    public static double[] getGeoPoint(String jsonString) {
+        try {
+            JSONObject object = new JSONObject(jsonString);
+            JSONObject location = object.getJSONArray("results")
+                    .getJSONObject(0)
+                    .getJSONObject("geometry")
+                    .getJSONObject("location");
+            double lat = location.getDouble("lat");
+            double lng = location.getDouble("lng");
+            return new double[]{lat, lng};
 
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
