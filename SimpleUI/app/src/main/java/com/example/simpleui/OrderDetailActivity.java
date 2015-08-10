@@ -1,6 +1,7 @@
 package com.example.simpleui;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -38,14 +39,24 @@ public class OrderDetailActivity extends ActionBarActivity {
         String url = Utils.getGeoQueryUrl(address);
 
         Utils.NetworkTask task = new Utils.NetworkTask();
-
         task.setCallback(new Utils.NetworkTask.Callback() {
             @Override
-            public void done(String fetchResult) {
-//                textView.setText(fetchResult);
+            public void done(byte[] fetchResult) {
+//                textView.setText(new String(fetchResult));
             }
         });
         task.execute(url);
+
+        String staticMapUrl = Utils.getStaticMapUrl(address);
+        Utils.NetworkTask getStaticMapTask = new Utils.NetworkTask();
+        getStaticMapTask.setCallback(new Utils.NetworkTask.Callback() {
+            @Override
+            public void done(byte[] fetchResult) {
+                Bitmap bm = Utils.byteToBitmap(fetchResult);
+                imageView.setImageBitmap(bm);
+            }
+        });
+        getStaticMapTask.execute(staticMapUrl);
     }
 
     @Override

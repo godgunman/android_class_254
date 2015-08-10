@@ -157,7 +157,7 @@ public class Utils {
     }
 
 
-    public static class NetworkTask extends AsyncTask<String, Void, String> {
+    public static class NetworkTask extends AsyncTask<String, Void, byte[]> {
 
         private Callback callback;
 
@@ -166,23 +166,19 @@ public class Utils {
         }
 
         @Override
-        protected String doInBackground(String... params) {
+        protected byte[] doInBackground(String... params) {
 
             String url = params[0];
-            String fetchResult = Utils.fetchUrl(url);
-
-            Log.d("debug", fetchResult);
-
-            return fetchResult;
+            return Utils.fetchUrlToByte(url);
         }
 
         @Override
-        protected void onPostExecute(String fetchResult) {
+        protected void onPostExecute(byte[] fetchResult) {
             callback.done(fetchResult);
         }
 
         interface Callback {
-            void done(String fetchResult);
+            void done(byte[] fetchResult);
         }
     }
 
