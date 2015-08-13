@@ -28,6 +28,9 @@ public class OrderDetailActivity extends ActionBarActivity
     private WebView webView;
     private ImageView imageView;
 
+    private GoogleMap googleMap;
+    private double[] geoPoint;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +53,12 @@ public class OrderDetailActivity extends ActionBarActivity
         task.setCallback(new Utils.NetworkTask.Callback() {
             @Override
             public void done(byte[] fetchResult) {
-//                textView.setText(new String(fetchResult));
+                String jsonString = new String(fetchResult);
+                geoPoint = Utils.getGeoPoint(jsonString);
+                textView.setText("" + geoPoint[0] + "," + geoPoint[1]);
+
+                if (googleMap != null)
+                    setUpGoogleMap();
             }
         });
         task.execute(url);
@@ -75,6 +83,20 @@ public class OrderDetailActivity extends ActionBarActivity
 
     }
 
+    //25.017409, 121.540402
+    private void setUpGoogleMap() {
+        LatLng ntu = new LatLng(geoPoint[0], geoPoint[1]);
+
+        googleMap.moveCamera(
+                CameraUpdateFactory.newLatLngZoom(ntu, 15));
+        googleMap.setMyLocationEnabled(true);
+
+        googleMap.addMarker(new MarkerOptions()
+                .position(ntu)
+                .title("NTU")
+                .snippet("CSIE building"));
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -97,20 +119,12 @@ public class OrderDetailActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
-    //25.017409, 121.540402
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LatLng ntu = new LatLng(25.017409, 121.540402);
+        this.googleMap = googleMap;
 
-        googleMap.moveCamera(
-                CameraUpdateFactory.newLatLngZoom(ntu, 15));
-        googleMap.setMyLocationEnabled(true);
-
-        googleMap.addMarker(new MarkerOptions()
-                .position(ntu)
-                .title("NTU")
-                .snippet("CSIE building"));
+        if(geoPoint != null)
+            setUpGoogleMap();
 
     }
 }
