@@ -6,4 +6,5 @@
     <string name="title_activity_menu">Menu</string>
     <string name="title_activity_order_detail">OrderDetail</string>
     <string name="google_maps_key">AIzaSyB_CWyZ_28SCLQeV3elr2k-S8gSENjSsz0</string>
+    <string name="facebook_app_id">742129415899400</string>
 </resources>
