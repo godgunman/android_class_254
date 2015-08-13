@@ -121,7 +121,7 @@ public class Utils {
             int len = 0;
 
             while( (len = is.read(buffer)) != -1) {
-                baos.write(buffer);
+                baos.write(buffer, 0, len);
             }
 
             return baos.toByteArray();
