@@ -85,16 +85,21 @@ public class OrderDetailActivity extends ActionBarActivity
 
     //25.017409, 121.540402
     private void setUpGoogleMap() {
-        LatLng ntu = new LatLng(geoPoint[0], geoPoint[1]);
+
+        String[] tmp = getIntent().getStringExtra("address").split(",");
+        String title = tmp[0];
+        String snippet = tmp[1];
+
+        LatLng store = new LatLng(geoPoint[0], geoPoint[1]);
 
         googleMap.moveCamera(
-                CameraUpdateFactory.newLatLngZoom(ntu, 15));
+                CameraUpdateFactory.newLatLngZoom(store, 15));
         googleMap.setMyLocationEnabled(true);
 
         googleMap.addMarker(new MarkerOptions()
-                .position(ntu)
-                .title("NTU")
-                .snippet("CSIE building"));
+                .position(store)
+                .title(title)
+                .snippet(snippet));
     }
 
     @Override
