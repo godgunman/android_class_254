@@ -13,8 +13,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 
-public class OrderDetailActivity extends ActionBarActivity {
+
+public class OrderDetailActivity extends ActionBarActivity
+        implements OnMapReadyCallback {
 
     private TextView textView;
     private WebView webView;
@@ -53,12 +58,18 @@ public class OrderDetailActivity extends ActionBarActivity {
             @Override
             public void done(byte[] fetchResult) {
                 Bitmap bm = Utils.byteToBitmap(fetchResult);
-                Log.d("debug", "len:" + fetchResult.length);
-                Log.d("debug", "bitmap:" + bm);
+//                Log.d("debug", "len:" + fetchResult.length);
+//                Log.d("debug", "bitmap:" + bm);
                 imageView.setImageBitmap(bm);
             }
         });
         getStaticMapTask.execute(staticMapUrl);
+
+        SupportMapFragment mapFragment =
+                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+
+        mapFragment.getMapAsync(this);
+
     }
 
     @Override
@@ -83,4 +94,8 @@ public class OrderDetailActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        Log.d("debug", "onMapReady");
+    }
 }
