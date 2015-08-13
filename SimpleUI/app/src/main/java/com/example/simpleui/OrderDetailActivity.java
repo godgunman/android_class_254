@@ -13,9 +13,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 
 public class OrderDetailActivity extends ActionBarActivity
@@ -94,8 +97,20 @@ public class OrderDetailActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
+    //25.017409, 121.540402
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.d("debug", "onMapReady");
+        LatLng ntu = new LatLng(25.017409, 121.540402);
+
+        googleMap.moveCamera(
+                CameraUpdateFactory.newLatLngZoom(ntu, 15));
+        googleMap.setMyLocationEnabled(true);
+
+        googleMap.addMarker(new MarkerOptions()
+                .position(ntu)
+                .title("NTU")
+                .snippet("CSIE building"));
+
     }
 }
