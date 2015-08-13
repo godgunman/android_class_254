@@ -53,15 +53,12 @@ public class OrderDetailActivity extends ActionBarActivity {
             @Override
             public void done(byte[] fetchResult) {
                 Bitmap bm = Utils.byteToBitmap(fetchResult);
-                Log.d("debug", staticMapUrl);
                 Log.d("debug", "len:" + fetchResult.length);
-                Log.d("debug", "len:" + fetchResult.length
-                        + "bm:width" + bm.getWidth()
-                        + "bm:height" + bm.getHeight());
+                Log.d("debug", "bitmap:" + bm);
                 imageView.setImageBitmap(bm);
             }
         });
-        getStaticMapTask.execute("http://masaliados.cl/wp/wp-content/uploads/2013/10/big-google-logo.png");
+        getStaticMapTask.execute(staticMapUrl);
     }
 
     @Override
