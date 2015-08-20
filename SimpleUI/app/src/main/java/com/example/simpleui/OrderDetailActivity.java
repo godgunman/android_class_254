@@ -1,17 +1,17 @@
 package com.example.simpleui;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -21,33 +21,92 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
-public class OrderDetailActivity extends ActionBarActivity
+public class OrderDetailActivity extends AppCompatActivity
         implements OnMapReadyCallback {
 
-    private TextView textView;
-    private WebView webView;
-    private ImageView imageView;
+    private TextView address;
+    private WebView staticMapWebView;
+    private ImageView staticMapImage;
+    private Spinner showMethod;
 
     private GoogleMap googleMap;
     private double[] geoPoint;
+    private SupportMapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
 
-        textView = (TextView) findViewById(R.id.textView);
-        webView = (WebView) findViewById(R.id.webView);
-        imageView = (ImageView) findViewById(R.id.imageView);
+        viewsInit();
 
-        Intent intent = getIntent();
-        String note = intent.getStringExtra("note");
-        String address = intent.getStringExtra("address").split(",")[1];
-        String sum = intent.getStringExtra("sum");
+        String addressString = getIntent().getStringExtra("address").split(",")[1];
 
-        webView.loadUrl(Utils.getStaticMapUrl(address));
+        address.setText(addressString);
+        staticMapWebView.loadUrl(Utils.getStaticMapUrl(addressString));
 
-        String url = Utils.getGeoQueryUrl(address);
+        loadGeoPoint(addressString);
+        loadStaticMapToImageView(addressString);
+
+    }
+
+    private void viewsInit() {
+        address = (TextView) findViewById(R.id.textView_address);
+        staticMapWebView = (WebView) findViewById(R.id.webView_static_map);
+        staticMapImage = (ImageView) findViewById(R.id.imageView_static_map);
+
+        showMethod = (Spinner) findViewById(R.id.spinner_show_method);
+        showMethod.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new String[]{"WebView", "ImageView", "MapFragment"}));
+        mapFragment =
+                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+
+        mapFragment.getMapAsync(this);
+        showMethod.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selected = (String) parent.getItemAtPosition(position);
+                switch (selected) {
+                    case "WebView":
+                        staticMapWebView.setVisibility(View.VISIBLE);
+                        staticMapImage.setVisibility(View.INVISIBLE);
+                        mapFragment.getView().setVisibility(View.INVISIBLE);
+                        break;
+                    case "ImageView":
+                        staticMapWebView.setVisibility(View.INVISIBLE);
+                        staticMapImage.setVisibility(View.VISIBLE);
+                        mapFragment.getView().setVisibility(View.INVISIBLE);
+                        break;
+                    case "MapFragment":
+                        staticMapWebView.setVisibility(View.INVISIBLE);
+                        staticMapImage.setVisibility(View.INVISIBLE);
+                        mapFragment.getView().setVisibility(View.VISIBLE);
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+    }
+
+    private void loadStaticMapToImageView(String addressString) {
+        String staticMapUrl = Utils.getStaticMapUrl(addressString);
+        Utils.NetworkTask getStaticMapTask = new Utils.NetworkTask();
+        getStaticMapTask.setCallback(new Utils.NetworkTask.Callback() {
+            @Override
+            public void done(byte[] fetchResult) {
+                Bitmap bm = Utils.byteToBitmap(fetchResult);
+                staticMapImage.setImageBitmap(bm);
+            }
+        });
+        getStaticMapTask.execute(staticMapUrl);
+    }
+
+    private void loadGeoPoint(final String addressString) {
+        String geoQueryUrl = Utils.getGeoQueryUrl(addressString);
 
         Utils.NetworkTask task = new Utils.NetworkTask();
         task.setCallback(new Utils.NetworkTask.Callback() {
@@ -55,35 +114,15 @@ public class OrderDetailActivity extends ActionBarActivity
             public void done(byte[] fetchResult) {
                 String jsonString = new String(fetchResult);
                 geoPoint = Utils.getGeoPoint(jsonString);
-                textView.setText("" + geoPoint[0] + "," + geoPoint[1]);
+                address.setText(addressString + "(" + geoPoint[0] + "," + geoPoint[1] + ")");
 
                 if (googleMap != null)
                     setUpGoogleMap();
             }
         });
-        task.execute(url);
-
-        final String staticMapUrl = Utils.getStaticMapUrl(address);
-        Utils.NetworkTask getStaticMapTask = new Utils.NetworkTask();
-        getStaticMapTask.setCallback(new Utils.NetworkTask.Callback() {
-            @Override
-            public void done(byte[] fetchResult) {
-                Bitmap bm = Utils.byteToBitmap(fetchResult);
-//                Log.d("debug", "len:" + fetchResult.length);
-//                Log.d("debug", "bitmap:" + bm);
-                imageView.setImageBitmap(bm);
-            }
-        });
-        getStaticMapTask.execute(staticMapUrl);
-
-        SupportMapFragment mapFragment =
-                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-
-        mapFragment.getMapAsync(this);
-
+        task.execute(geoQueryUrl);
     }
 
-    //25.017409, 121.540402
     private void setUpGoogleMap() {
 
         String[] tmp = getIntent().getStringExtra("address").split(",");
@@ -128,7 +167,7 @@ public class OrderDetailActivity extends ActionBarActivity
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
 
-        if(geoPoint != null)
+        if (geoPoint != null)
             setUpGoogleMap();
 
     }

@@ -149,7 +149,7 @@ public class Utils {
     }
 
     final static String STATIC_MAP_URL =
-            "https://maps.googleapis.com/maps/api/staticmap?center=%s&zoom=16&size=300x300&maptype=roadmap";
+            "https://maps.googleapis.com/maps/api/staticmap?center=%s&zoom=16&size=400x400&maptype=roadmap";
     public static String getStaticMapUrl(String center) {
         try {
             center = URLEncoder.encode(center, "utf-8");
