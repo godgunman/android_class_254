@@ -202,8 +202,8 @@ public class Utils {
         }
         return null;
     }
-
     public static String getDrinkSum(JSONArray menu) {
+        //TODO homework2
         return "41";
     }
 

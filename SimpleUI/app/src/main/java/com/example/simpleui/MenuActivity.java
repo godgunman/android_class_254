@@ -59,6 +59,8 @@ public class MenuActivity extends ActionBarActivity {
         return jsonArray.toString();
     }
 
+    //TODO homework1 新增一個類似 done(View view) 方法，來跟 cancel button 做連結
+
     public void done(View view) {
         Intent intent = new Intent();
         intent.putExtra("result", getResult());
