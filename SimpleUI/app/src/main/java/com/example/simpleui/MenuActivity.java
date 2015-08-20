@@ -59,6 +59,11 @@ public class MenuActivity extends ActionBarActivity {
         return jsonArray.toString();
     }
 
+    public void cancel(View view) {
+        setResult(RESULT_CANCELED);
+        finish();
+    }
+
     public void done(View view) {
         Intent intent = new Intent();
         intent.putExtra("result", getResult());

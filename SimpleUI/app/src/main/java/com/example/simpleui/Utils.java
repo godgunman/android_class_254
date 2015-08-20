@@ -203,8 +203,25 @@ public class Utils {
         return null;
     }
 
+    /**
+     * [{"l":0,"m":1,"name":"black tea","s":0},{"l":0,"m":1,"name":"green tea","s":0}]
+     * @param menu
+     * @return
+     */
     public static String getDrinkSum(JSONArray menu) {
-        return "41";
+        int len = menu.length();
+        int sum = 0;
+        for (int i = 0; i < len ;i++) {
+            try {
+                sum += menu.getJSONObject(i).getInt("l");
+                sum += menu.getJSONObject(i).getInt("m");
+                sum += menu.getJSONObject(i).getInt("s");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return String.valueOf(sum);
     }
 
 }

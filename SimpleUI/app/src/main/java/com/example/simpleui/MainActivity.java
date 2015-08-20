@@ -111,6 +111,11 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 editor.putBoolean("checkbox", isChecked);
                 editor.commit();
+                if (isChecked) {
+                    findViewById(R.id.imageView).setVisibility(View.INVISIBLE);
+                } else {
+                    findViewById(R.id.imageView).setVisibility(View.VISIBLE);
+                }
             }
         });
         hideImage.setChecked(sp.getBoolean("checkbox", false));
