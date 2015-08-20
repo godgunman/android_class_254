@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
@@ -201,4 +202,9 @@ public class Utils {
         }
         return null;
     }
+
+    public static String getDrinkSum(JSONArray menu) {
+        return "41";
+    }
+
 }

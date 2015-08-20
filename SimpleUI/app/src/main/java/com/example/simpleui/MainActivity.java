@@ -6,10 +6,8 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,7 +25,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -49,10 +46,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_MENU_ACTIVITY = 1;
     private static final int REQUEST_CODE_CAMERA = 2;
 
-    private EditText editText;
-    private CheckBox hideCheckBox;
-    private ListView listView;
-    private Spinner spinner;
+    private EditText noteInput;
+    private CheckBox hideImage;
+    private ListView orderHistoryListView;
+    private Spinner storesInfo;
 
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
@@ -70,22 +67,29 @@ public class MainActivity extends AppCompatActivity {
         sp = getSharedPreferences("settings", Context.MODE_PRIVATE);
         editor = sp.edit();
 
-        listView = (ListView) findViewById(R.id.listView);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        viewsInit();
+
+        loadHistory();
+        loadStoreInfo();
+    }
+
+    private void viewsInit() {
+        orderHistoryListView = (ListView) findViewById(R.id.listView);
+        orderHistoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 goToOrderDetailActivity(view, position);
             }
         });
 
-        spinner = (Spinner) findViewById(R.id.store_info);
+        storesInfo = (Spinner) findViewById(R.id.store_info);
 
-        editText = (EditText) findViewById(R.id.editText);
-        editText.setOnKeyListener(new View.OnKeyListener() {
+        noteInput = (EditText) findViewById(R.id.editText);
+        noteInput.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
 
-                String text = editText.getText().toString();
+                String text = noteInput.getText().toString();
                 editor.putString("text", text);
                 editor.commit();
 
@@ -98,32 +102,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        editText.setText(sp.getString("text", ""));
+        noteInput.setText(sp.getString("text", ""));
 
 
-        hideCheckBox = (CheckBox) findViewById(R.id.checkBox);
-        hideCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        hideImage = (CheckBox) findViewById(R.id.checkBox);
+        hideImage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 editor.putBoolean("checkbox", isChecked);
                 editor.commit();
             }
         });
-        hideCheckBox.setChecked(sp.getBoolean("checkbox", false));
+        hideImage.setChecked(sp.getBoolean("checkbox", false));
 
-        loadHistory();
-        loadStoreInfo();
     }
 
     public void submit(View view) {
-        String text = editText.getText().toString();
-        if (hideCheckBox.isChecked()) {
-            text = "***********";
-        }
+        String text = noteInput.getText().toString();
 
         if (menuResult != null) {
             try {
-                String storeInfo = (String) spinner.getSelectedItem();
+                String storeInfo = (String) storesInfo.getSelectedItem();
 
                 JSONObject order = new JSONObject();
                 JSONArray menuResultArray = new JSONArray(menuResult);
@@ -150,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 Toast.makeText(this, order.toString(), Toast.LENGTH_LONG).show();
-                editText.setText("");
+                noteInput.setText("");
                 menuResult = null;
                 hasPhoto = false;
                 loadHistory();
@@ -177,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void putDataToIntent(int position, Intent intent) {
-        SimpleAdapter adapter = (SimpleAdapter) listView.getAdapter();
+        SimpleAdapter adapter = (SimpleAdapter) orderHistoryListView.getAdapter();
         Map<String, String> item = (Map<String, String>)
                 adapter.getItem(position);
 
@@ -189,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
     private void putDataToIntent(ParseObject object, Intent intent) {
         intent.putExtra("note", object.getString("note"));
         intent.putExtra("address", object.getString("address"));
-        intent.putExtra("sum", getDrinkSum(object.getJSONArray("menu")));
+        intent.putExtra("sum", Utils.getDrinkSum(object.getJSONArray("menu")));
         intent.putExtra("menu", object.getJSONArray("menu").toString());
     }
 
@@ -217,9 +216,6 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_CODE_CAMERA);
     }
 
-    public String getDrinkSum(JSONArray menu) {
-        return "41";
-    }
 
     private void loadStoreInfo() {
 
@@ -244,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, data);
 
-        spinner.setAdapter(adapter);
+        storesInfo.setAdapter(adapter);
     }
 
     private void loadHistory() {
@@ -259,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
                     orderQueryResult = list;
                     for (ParseObject object : list) {
                         String note = object.getString("note");
-                        String sum = getDrinkSum(object.getJSONArray("menu"));
+                        String sum = Utils.getDrinkSum(object.getJSONArray("menu"));
                         String address = object.getString("address");
 
                         Map<String, String> item = new HashMap<>();
@@ -284,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
         SimpleAdapter adapter = new SimpleAdapter(this, data,
                 R.layout.listview_item, from, to);
 
-        listView.setAdapter(adapter);
+        orderHistoryListView.setAdapter(adapter);
     }
 
     @Override
